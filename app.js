@@ -2,8 +2,8 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
 const cors = require('cors');
-const userRoutes = require('./routes/userRoutes');
-const messagesRoutes = require('./routes/messagesRoutes');
+const userRoutes = require('./src/routes/userRoutes');
+const messagesRoutes = require('./src/routes/messagesRoutes');
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
