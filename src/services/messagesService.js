@@ -15,8 +15,10 @@ module.exports = {
         return res;
     },
 
-    getMessages(userId) {
-        return messages.filter(message => message.sender === userId);
+    getMessages(userId, messageId) {
+        const userMessages =  messages.filter(message => message.sender === userId);
+       
+        return messageId ? userMessages.filter(message => message.id === messageId) : userMessages;
     }
 }
 

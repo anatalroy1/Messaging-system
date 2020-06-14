@@ -7,11 +7,10 @@ const publicKey = fs.readFileSync('./public.key.pub', 'utf8');
 module.exports = {
     getMessages(req, res){
         const token = req.headers.token;
-        const params = req.params;
-        // console.log(params);
+        const { messageId } = req.params;
         try {
             const { id } = verifyToken(token);
-            const messages = messagesService.getMessages(id);
+            const messages = messagesService.getMessages(id, +messageId);
             res.status(200).json({messages: messages});
         } catch(err) {
             console.log(err);
