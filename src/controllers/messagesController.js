@@ -8,7 +8,7 @@ module.exports = {
     getMessages(req, res){
         const token = req.headers.token;
         const params = req.params;
-        console.log(params);
+        // console.log(params);
         try {
             const { id } = verifyToken(token);
             const messages = messagesService.getMessages(id);
