@@ -1,9 +1,12 @@
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
+
+const privateKey = fs.readFileSync('./private.key', 'utf8'); // to sign JWT
 
 const users = [
     {
+        // for the purpose of this task, name and id are unique
         id: 1,
-        // for the purpose of this task, name is unique
         name: "test"
     }
 ];
@@ -13,7 +16,7 @@ function isUserExist(userName) {
 }
 
 function createToken(userId){
-    return jwt.sign({id: userId}, 'privatekey');
+    return jwt.sign({id: userId}, privateKey, {algorithm: "RS256"});
 }
 
 module.exports = {
