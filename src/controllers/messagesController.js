@@ -5,7 +5,23 @@ const messagesService = require('../services/messagesService');
 const publicKey = fs.readFileSync('./public.key.pub', 'utf8');
 
 module.exports = {
-    getMessages(){},
+    getMessages(req, res){
+        const token = req.headers.token;
+        const params = req.params;
+        console.log(params);
+        try {
+            const { id } = verifyToken(token);
+            const messages = messagesService.getMessages(id);
+            res.status(200).json({messages: messages});
+        } catch(err) {
+            console.log(err);
+            return res.status(401).json({
+                title: "error",
+                error: err
+            });
+        }
+    },
+
     postMessage(req, res){
         const token = req.headers.token;
         const message = req.body;
@@ -18,7 +34,6 @@ module.exports = {
                 res.status(400).json({title:"Failure, invalid message structure"});
             }            
         } catch(err) {
-            console.log('in catch post message',err);
             return res.status(401).json({
                 title: "error",
                 error: err
