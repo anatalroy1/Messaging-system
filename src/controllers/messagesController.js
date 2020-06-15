@@ -39,7 +39,22 @@ module.exports = {
             });
         }
     },
-    deleteMessage(){}
+
+    deleteMessage(req,res){
+        const token = req.headers.token;
+        const { messageId } = req.params;
+        try {
+            const { id } = verifyToken(token);
+            const messages = messagesService.deleteMessage(+messageId, id);
+            res.status(200).json({messages: messages});
+        } catch(err) {
+            console.log(err);
+            return res.status(401).json({
+                title: "error",
+                error: err
+            });
+        }
+    }
 }
 
 
