@@ -4,10 +4,10 @@ const messageStatus = { "UNREAD": 1, "READ": 2};
 let id = 0;
 
 module.exports = {
-    postMessage(userId, message) {
+    postMessage(user, message) {
         let res = null;
         if(isValidMessage(message)){
-           message.sender = userId;
+           message.sender = user.phoneNumber;
            message.creationDate = new Date();
            message.id = ++id;
            message.status = messageStatus.UNREAD;
@@ -18,21 +18,25 @@ module.exports = {
         return res;
     },
 
-    getMessages(userId, messageId) {
-        const userMessages =  messages.filter(message => message.receiver === userId);
+    getMessages(user, messageId) {
+        const userMessages =  messages.filter(message => message.receiver === user.phoneNumber);
         if(messageId) {
-            userMessages = userMessages.filter(message => message.id === messageId);
+            userMessages = [...userMessages.find(message => message.id === messageId)];
         }
-        userMessages.forEach(x => x.status === messageStatus.READ);
+        userMessages.forEach(message => message.status === messageStatus.READ);
         
         return userMessages;
     },
 
-    deleteMessage(messageId, userId) {
+    deleteMessage(user, messageId) {
         const message = messages.find(message => message.id === messageId);
-        if(message.sender === userId || message.receiver === userId){
+        if(message && message.sender === user.phoneNumber || message.receiver === user.phoneNumber) {
+            message.deleted = true;
+            // can delete resource of mark it as deleted. 
             messages = messages.filter(message => message.id !== message.messageId);
         }
+
+        return message;
     }
 }
 
