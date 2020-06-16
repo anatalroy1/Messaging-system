@@ -1,4 +1,4 @@
-const messages = [];
+let messages = [];
 const messageStatus = { "UNREAD": 1, "READ": 2};
 // id is uniqe
 let id = 0;
@@ -30,10 +30,10 @@ module.exports = {
 
     deleteMessage(user, messageId) {
         const message = messages.find(message => message.id === messageId);
-        if(message && message.sender === user.phoneNumber || message.receiver === user.phoneNumber) {
+        if(message && (message.sender === user.phoneNumber || message.receiver === user.phoneNumber)) {
             message.deleted = true;
             // can delete resource of mark it as deleted. 
-            messages = messages.filter(message => message.id !== message.messageId);
+            messages = messages.filter(message => message.id !== messageId);
         }
 
         return message;

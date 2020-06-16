@@ -43,7 +43,7 @@ module.exports = {
         }
     },
 
-    deleteMessage(req,res){
+    deleteMessage(req, res){
         const token = req.headers.token;
         const { messageId } = req.params;
         try {
