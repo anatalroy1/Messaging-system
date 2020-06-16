@@ -5,14 +5,20 @@ const privateKey = fs.readFileSync('./private.key', 'utf8'); // to sign JWT
 
 const users = [
     {
-        // for the purpose of this task, name and id are unique
+        // for the purpose of this task, phoneNumber and id are unique
         id: 1,
-        name: "test"
+        name: "testA", 
+        phoneNumber: 1234
+    },
+    {
+        id: 2,
+        name: "testB",
+        phoneNumber: 5678
     }
 ];
 
-function isUserExist(userName) {
-    return users.some(user => user.name === userName);
+function isUserExist(phoneNumber) {
+    return users.some(user => user.phoneNumber === phoneNumber);
 }
 
 function createToken(userId){
@@ -20,14 +26,18 @@ function createToken(userId){
 }
 
 module.exports = {
-    loginUser(userName) {
-        if (userName && isUserExist(userName)) {
-            const { id } = users.find(user => user.name === userName);
+    loginUser(phoneNumber) {
+        if (phoneNumber && isUserExist(+phoneNumber)) {
+            const { id } = users.find(user => user.phoneNumber === +phoneNumber);
 
             return createToken(id);
         } else {
             throw new Error('user wasnt fount');
         }
     },
+
+    getUserById(userId) {
+        return users.find(user => user.id === userId);
+    }
 }
 
