@@ -22,7 +22,7 @@ function isUserExist(phoneNumber) {
 }
 
 function createToken(userId){
-    return jwt.sign({id: userId}, privateKey, {algorithm: "RS256"});
+    return jwt.sign({id: userId}, privateKey, {expiresIn: '3h', algorithm: "RS256"});
 }
 
 module.exports = {
