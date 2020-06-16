@@ -6,13 +6,13 @@ const userService = require('../services/userService');
 const publicKey = fs.readFileSync('./public.key.pub', 'utf8');
 
 module.exports = {
-    getMessages(req, res){
+    getMessages(req, res) {
         const token = req.headers.token;
-        const { messageId } = req.params;
+        const { unread: unreadMessages } = req.query;
         try {
             const { id } = verifyToken(token);
             const user = userService.getUserById(id);
-            const messages = messagesService.getMessages(user, +messageId);
+            const messages = messagesService.getMessages(user, unreadMessages);
             res.status(200).json({title:"success", messages: messages});
         } catch(err) {
             console.log(err);
@@ -23,7 +23,28 @@ module.exports = {
         }
     },
 
-    postMessage(req, res){
+    readMessage(req, res) {
+        const token = req.headers.token;
+        const { messageId } = req.params;
+        try {
+            const { id } = verifyToken(token);
+            const user = userService.getUserById(id);
+            const message = messagesService.readMessage(user, +messageId);
+            if(message) {
+                res.status(200).json({title:"success", message});
+            } else {
+                res.status(404).json({title:"message not found"});
+            }
+        } catch(err) {
+            console.log(err);
+            return res.status(401).json({
+                title: "error",
+                error: err
+            });
+        }
+    },
+
+    postMessage(req, res) {
         const token = req.headers.token;
         const message = req.body;
         try {
@@ -43,7 +64,7 @@ module.exports = {
         }
     },
 
-    deleteMessage(req, res){
+    deleteMessage(req, res) {
         const token = req.headers.token;
         const { messageId } = req.params;
         try {

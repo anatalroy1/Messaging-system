@@ -1,5 +1,5 @@
 let messages = [];
-const messageStatus = { "UNREAD": 1, "READ": 2};
+const messageStatus = { "UNREAD": "unread", "READ": "read"};
 // id is uniqe
 let id = 0;
 
@@ -14,18 +14,26 @@ module.exports = {
            messages.push(message);
            res = message;
         }
-        console.log(messages);
+        
         return res;
     },
 
-    getMessages(user, messageId) {
-        const userMessages =  messages.filter(message => message.receiver === user.phoneNumber && message.status === messageStatus.UNREAD);
-        if(messageId) {
-            userMessages = [...userMessages.find(message => message.id === messageId)];
+    getMessages(user, onluUnreadMessages) {
+        let userMessages = messages.filter(message => message.receiver === user.phoneNumber);
+        if(onluUnreadMessages) {
+            userMessages = userMessages.filter(message => message.status === messageStatus.UNREAD);
         }
-        userMessages.forEach(message => message.status = messageStatus.READ);
         
         return userMessages;
+    },
+
+    readMessage(user, messageId){
+        const message = messages.find(message => message.receiver === user.phoneNumber && message.id === messageId);
+        if(message) {
+            message.status = messageStatus.READ;
+        }
+
+        return message;
     },
 
     deleteMessage(user, messageId) {
