@@ -19,11 +19,11 @@ module.exports = {
     },
 
     getMessages(user, messageId) {
-        const userMessages =  messages.filter(message => message.receiver === user.phoneNumber);
+        const userMessages =  messages.filter(message => message.receiver === user.phoneNumber && message.status === messageStatus.UNREAD);
         if(messageId) {
             userMessages = [...userMessages.find(message => message.id === messageId)];
         }
-        userMessages.forEach(message => message.status === messageStatus.READ);
+        userMessages.forEach(message => message.status = messageStatus.READ);
         
         return userMessages;
     },
